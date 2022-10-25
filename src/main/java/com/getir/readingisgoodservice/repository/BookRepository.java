@@ -8,7 +8,5 @@ import org.springframework.stereotype.Repository;
  * Created by TCOKARAKAYA on 23.10.2022.
  */
 @Repository
-public interface BookRepository extends JpaRepository<Book, Long>
-{
-    Book findByName(String request);
+public interface BookRepository extends JpaRepository<Book, Long> {
 }

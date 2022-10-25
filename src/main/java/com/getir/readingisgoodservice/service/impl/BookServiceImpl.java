@@ -45,4 +45,9 @@ public class BookServiceImpl implements BookService
             throw new RuntimeException();
         }
     }
+
+    @Override
+    public Optional<Book> getBookByBookId(Long id) {
+        return bookRepository.findById(id);
+    }
 }
