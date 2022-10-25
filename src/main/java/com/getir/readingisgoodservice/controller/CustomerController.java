@@ -38,11 +38,11 @@ public class CustomerController
                 .build();
     }
 
-    @GetMapping("/getByName/{name}")
-    public ApiResponse<CustomerResponse> getCustomerByName(@PathVariable String request)
+    @GetMapping("/{id}")
+    public ApiResponse<CustomerResponse> getCustomerById(@PathVariable Long id)
     {
-        log.info("getBookByName called with: {}", request);
-        CustomerResponse customerResponse = customerService.getCustomerByName(request);
+        log.info("getCustomerById called with: {}", id);
+        CustomerResponse customerResponse = customerService.getCustomerById(id);
         return ApiResponse.<CustomerResponse>builder()
                 .data(customerResponse)
                 .status("0")

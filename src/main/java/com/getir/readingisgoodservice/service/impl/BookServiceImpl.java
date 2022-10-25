@@ -27,28 +27,21 @@ public class BookServiceImpl implements BookService
 
     @Override
     @Transactional
-    public BookResponse createBook(BookRequest request)
-    {
+    public BookResponse createBook(BookRequest request) {
         Book bookSaved = bookRepository.save(toBook(request));
-        log.info("Customer saved successfully. Cusstomer: {}", bookSaved);
+        log.info("Book saved successfully. Book: {}", bookSaved);
         return toBookResponse(bookSaved);
     }
 
     @Override
-    public BookResponse getBookByName(String request)
-    {
-        Optional<Book> book = Optional.ofNullable(bookRepository.findByName(request));
+    public BookResponse getBookById(Long id) {
+        Optional<Book> book = bookRepository.findById(id);
 
-        if (book.isPresent())
-        {
+        if (book.isPresent()) {
             Book bookPresent = book.get();
-
-            log.info("Books found: {}", bookPresent);
-
+            log.info("Book found: {}", bookPresent);
             return toBookResponse(bookPresent);
-        }
-        else
-        {
+        } else {
             throw new RuntimeException();
         }
     }

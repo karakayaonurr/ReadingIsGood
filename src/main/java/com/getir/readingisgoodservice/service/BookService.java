@@ -6,9 +6,7 @@ import com.getir.readingisgoodservice.model.response.BookResponse;
 /**
  * Created by TCOKARAKAYA on 25.10.2022.
  */
-public interface BookService
-{
+public interface BookService {
     BookResponse createBook(BookRequest request);
-
-    BookResponse getBookByName(String request);
+    BookResponse getBookById(Long id);
 }

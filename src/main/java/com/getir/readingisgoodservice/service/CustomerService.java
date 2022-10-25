@@ -6,9 +6,7 @@ import com.getir.readingisgoodservice.model.response.CustomerResponse;
 /**
  * Created by TCOKARAKAYA on 23.10.2022.
  */
-public interface CustomerService
-{
+public interface CustomerService {
     CustomerResponse createCustomer(CustomerRequest request);
-
-    CustomerResponse getCustomerByName(String request);
+    CustomerResponse getCustomerById(Long id);
 }

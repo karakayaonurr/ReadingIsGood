@@ -26,7 +26,7 @@ public class BookController
 {
     private final BookService bookService;
 
-    @PostMapping("/create")
+    @PostMapping
     public ApiResponse<BookResponse> createBook(@Valid @RequestBody BookRequest request)
     {
         log.info("Create book called with request: {}", request);
@@ -38,11 +38,11 @@ public class BookController
                 .build();
     }
 
-    @GetMapping("/getByName/{name}")
-    public ApiResponse<BookResponse> getBookByName(@PathVariable String request)
+    @GetMapping("{id}")
+    public ApiResponse<BookResponse> getBookById(@PathVariable Long id)
     {
-        log.info("getBookByName called with: {}", request);
-        BookResponse bookResponse = bookService.getBookByName(request);
+        log.info("getBookById called with: {}", id);
+        BookResponse bookResponse = bookService.getBookById(id);
         return ApiResponse.<BookResponse>builder()
                 .data(bookResponse)
                 .status("0")
