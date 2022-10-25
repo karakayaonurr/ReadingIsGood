@@ -23,8 +23,8 @@ import javax.validation.constraints.NotEmpty;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class Customer extends BaseEntity {
-
+public class Customer extends BaseEntity
+{
     @NotEmpty(message = "Name can not be empty.")
     private String name;
 

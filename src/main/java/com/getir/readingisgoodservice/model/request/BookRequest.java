@@ -1,31 +1,19 @@
-package com.getir.readingisgoodservice.entity;
+package com.getir.readingisgoodservice.model.request;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.ToString;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 /**
- * Created by TCOKARAKAYA on 23.10.2022.
+ * Created by TCOKARAKAYA on 25.10.2022.
  */
-@Entity
-@Table(name = "book")
 @Getter
-@Setter
-@Builder
 @ToString
-@NoArgsConstructor
-@AllArgsConstructor
-public class Book extends BaseEntity
+public class BookRequest
 {
     @NotEmpty(message = "Name can not be empty.")
     private String name;

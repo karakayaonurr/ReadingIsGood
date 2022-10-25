@@ -8,5 +8,7 @@ import org.springframework.stereotype.Repository;
  * Created by TCOKARAKAYA on 23.10.2022.
  */
 @Repository
-public interface CustomerRepository extends JpaRepository<Customer, Long> {
+public interface CustomerRepository extends JpaRepository<Customer, Long>
+{
+    Customer findByName(String request);
 }

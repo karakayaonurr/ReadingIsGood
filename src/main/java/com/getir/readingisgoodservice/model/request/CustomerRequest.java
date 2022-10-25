@@ -11,11 +11,14 @@ import javax.validation.constraints.NotEmpty;
  */
 @Getter
 @ToString
-public class CustomerCreateRequest {
+public class CustomerRequest
+{
     @NotEmpty(message = "Name can not be empty.")
     private String name;
+
     @NotEmpty(message = "Surname can not be empty.")
     private String surname;
+
     @Email(message = "Invalid email format")
     private String email;
 }

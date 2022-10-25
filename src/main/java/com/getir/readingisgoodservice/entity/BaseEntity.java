@@ -18,8 +18,8 @@ import java.time.OffsetDateTime;
  */
 @Getter
 @MappedSuperclass
-public class BaseEntity implements Serializable {
-
+public class BaseEntity implements Serializable
+{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;

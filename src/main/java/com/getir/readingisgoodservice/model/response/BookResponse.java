@@ -5,15 +5,19 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.math.BigDecimal;
+
 /**
- * Created by TCOKARAKAYA on 23.10.2022.
+ * Created by TCOKARAKAYA on 25.10.2022.
  */
 @Getter
 @Setter
 @Builder
 @ToString
-public class CustomerCreateResponse {
+public class BookResponse
+{
     private String name;
-    private String surname;
-    private String email;
+    private String writer;
+    private Long stock;
+    private BigDecimal price;
 }
