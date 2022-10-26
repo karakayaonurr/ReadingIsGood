@@ -2,7 +2,6 @@ package com.getir.readingisgoodservice.controller;
 
 import com.getir.readingisgoodservice.model.ApiResponse;
 import com.getir.readingisgoodservice.model.response.StatisticsResponse;
-import com.getir.readingisgoodservice.model.response.StockResponse;
 import com.getir.readingisgoodservice.service.StatisticsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +18,7 @@ public class StatisticsController {
 
     private final StatisticsService statisticsService;
 
-    @GetMapping("{customerId}/")
+    @GetMapping("{customerId}")
     public ApiResponse<StatisticsResponse> getStatistics(@PathVariable Long customerId) {
         log.info("getStatistics called with: {}", customerId);
         StatisticsResponse statisticsResponse = statisticsService.getStatistics(customerId);
