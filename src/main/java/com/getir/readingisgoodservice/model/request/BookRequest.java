@@ -13,8 +13,7 @@ import java.math.BigDecimal;
  */
 @Getter
 @ToString
-public class BookRequest
-{
+public class BookRequest {
     @NotEmpty(message = "Name can not be empty.")
     private String name;
 

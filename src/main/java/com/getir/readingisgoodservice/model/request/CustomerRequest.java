@@ -11,8 +11,7 @@ import javax.validation.constraints.NotEmpty;
  */
 @Getter
 @ToString
-public class CustomerRequest
-{
+public class CustomerRequest {
     @NotEmpty(message = "Name can not be empty.")
     private String name;
 
