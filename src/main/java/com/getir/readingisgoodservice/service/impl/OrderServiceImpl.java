@@ -13,6 +13,7 @@ import com.getir.readingisgoodservice.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,11 +32,16 @@ public class OrderServiceImpl implements OrderService {
     private final BookService bookService;
     private final CustomerService customerService;
     @Override
+    @Transactional
     public OrderCreateResponse createOrder(OrderCreateRequest request) {
         List<Book> books = new ArrayList<>();
         request.getBookOrderRequests().forEach(bookOrder -> {
             Optional<Book> book = bookService.getBookByBookId(bookOrder.getBookId());
-            book.ifPresent(books::add);
+            if (book.isPresent()) {
+                Book bookPresent = book.get();
+                books.add(bookPresent);
+                bookPresent.setStock(bookPresent.getStock() - bookOrder.getOrderCount());
+            }
         });
         Order orderSaved = orderRepository.save(toOrder(request, books));
         log.info("Customer saved successfully. Cusstomer: {}", orderSaved);

@@ -3,6 +3,7 @@ package com.getir.readingisgoodservice.service.impl;
 import com.getir.readingisgoodservice.entity.Book;
 import com.getir.readingisgoodservice.model.request.BookRequest;
 import com.getir.readingisgoodservice.model.response.BookResponse;
+import com.getir.readingisgoodservice.model.response.StockResponse;
 import com.getir.readingisgoodservice.repository.BookRepository;
 import com.getir.readingisgoodservice.service.BookService;
 import lombok.RequiredArgsConstructor;
@@ -49,5 +50,19 @@ public class BookServiceImpl implements BookService
     @Override
     public Optional<Book> getBookByBookId(Long id) {
         return bookRepository.findById(id);
+    }
+
+    @Override
+    public StockResponse getBookStock(Long id) {
+        Optional<Book> book = bookRepository.findById(id);
+        if (book.isPresent()) {
+            Book bookPresent = book.get();
+            return StockResponse.builder()
+                    .bookId(bookPresent.getId())
+                    .bookName(bookPresent.getName())
+                    .remainingStock(bookPresent.getStock())
+                    .build();
+        }
+        return new StockResponse();
     }
 }

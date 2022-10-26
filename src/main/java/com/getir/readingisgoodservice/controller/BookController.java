@@ -3,6 +3,7 @@ package com.getir.readingisgoodservice.controller;
 import com.getir.readingisgoodservice.model.ApiResponse;
 import com.getir.readingisgoodservice.model.request.BookRequest;
 import com.getir.readingisgoodservice.model.response.BookResponse;
+import com.getir.readingisgoodservice.model.response.StockResponse;
 import com.getir.readingisgoodservice.service.BookService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -45,6 +46,17 @@ public class BookController
         BookResponse bookResponse = bookService.getBookById(id);
         return ApiResponse.<BookResponse>builder()
                 .data(bookResponse)
+                .status("0")
+                .message("success")
+                .build();
+    }
+
+    @GetMapping("{id}/stock")
+    public ApiResponse<StockResponse> getBookStock(@PathVariable Long id) {
+        log.info("getBookStock called with: {}", id);
+        StockResponse stockResponse = bookService.getBookStock(id);
+        return ApiResponse.<StockResponse>builder()
+                .data(stockResponse)
                 .status("0")
                 .message("success")
                 .build();
