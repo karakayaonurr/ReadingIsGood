@@ -1,0 +1,7 @@
+services:
+  paycore-credit-application-project:
+    build: .
+    image: getir-reading-is-good-project
+    ports:
+      - "1010:1010"
+    restart: on-failure
