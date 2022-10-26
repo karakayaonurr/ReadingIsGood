@@ -1,6 +1,7 @@
 package com.getir.readingisgoodservice.service;
 
 import com.getir.readingisgoodservice.model.request.CustomerRequest;
+import com.getir.readingisgoodservice.model.response.CustomerOrderResponse;
 import com.getir.readingisgoodservice.model.response.CustomerResponse;
 
 /**
@@ -9,4 +10,6 @@ import com.getir.readingisgoodservice.model.response.CustomerResponse;
 public interface CustomerService {
     CustomerResponse createCustomer(CustomerRequest request);
     CustomerResponse getCustomerById(Long id);
+
+    CustomerOrderResponse getCustomerOrders(Long id);
 }

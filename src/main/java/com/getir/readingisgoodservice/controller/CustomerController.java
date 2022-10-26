@@ -2,6 +2,7 @@ package com.getir.readingisgoodservice.controller;
 
 import com.getir.readingisgoodservice.model.ApiResponse;
 import com.getir.readingisgoodservice.model.request.CustomerRequest;
+import com.getir.readingisgoodservice.model.response.CustomerOrderResponse;
 import com.getir.readingisgoodservice.model.response.CustomerResponse;
 import com.getir.readingisgoodservice.service.CustomerService;
 import lombok.RequiredArgsConstructor;
@@ -45,6 +46,17 @@ public class CustomerController
         CustomerResponse customerResponse = customerService.getCustomerById(id);
         return ApiResponse.<CustomerResponse>builder()
                 .data(customerResponse)
+                .status("0")
+                .message("success")
+                .build();
+    }
+
+    @GetMapping("/{id}/orders")
+    public ApiResponse<CustomerOrderResponse> getCustomerOrders(@PathVariable Long id) {
+        log.info("getCustomerOrders called with: {}", id);
+        CustomerOrderResponse customerOrderResponse = customerService.getCustomerOrders(id);
+        return ApiResponse.<CustomerOrderResponse>builder()
+                .data(customerOrderResponse)
                 .status("0")
                 .message("success")
                 .build();

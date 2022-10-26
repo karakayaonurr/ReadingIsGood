@@ -8,11 +8,14 @@ import com.getir.readingisgoodservice.model.request.BookOrderRequest;
 import com.getir.readingisgoodservice.model.request.BookRequest;
 import com.getir.readingisgoodservice.model.request.CustomerRequest;
 import com.getir.readingisgoodservice.model.request.OrderCreateRequest;
+import com.getir.readingisgoodservice.model.response.BookDetailResponse;
 import com.getir.readingisgoodservice.model.response.BookResponse;
 import com.getir.readingisgoodservice.model.response.CustomerResponse;
 import com.getir.readingisgoodservice.model.response.OrderCreateResponse;
+import com.getir.readingisgoodservice.model.response.OrderDetailResponse;
 import com.getir.readingisgoodservice.model.response.OrderResponse;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -83,5 +86,27 @@ public class MapperUtil
 
     public static List<OrderResponse> toOrderResponses(List<BookOrderRequest> bookOrderRequests) {
         return bookOrderRequests.stream().map(MapperUtil::toOrderResponse).collect(Collectors.toList());
+    }
+
+    public static OrderDetailResponse toOrderDetailResponse(Order order) {
+        List<BookDetailResponse> bookDetailResponseList = new ArrayList<>();
+        order.getBookList().forEach(book -> {
+            bookDetailResponseList.add(toBookDetailResponse(book));
+        });
+        return OrderDetailResponse.builder()
+                .books(bookDetailResponseList)
+                .totalBook(order.getTotalBookCount())
+                .totalPrice(order.getTotalPrice())
+                .build();
+    }
+
+    public static List<OrderDetailResponse> toOrderDetailResponses(List<Order> orders) {
+        return orders.stream().map(MapperUtil::toOrderDetailResponse).collect(Collectors.toList());
+    }
+
+    private static BookDetailResponse toBookDetailResponse(Book book) {
+        return BookDetailResponse.builder()
+                .bookName(book.getName())
+                .build();
     }
 }

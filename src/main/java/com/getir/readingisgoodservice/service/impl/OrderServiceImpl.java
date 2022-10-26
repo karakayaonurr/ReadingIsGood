@@ -50,4 +50,9 @@ public class OrderServiceImpl implements OrderService {
         CustomerResponse customerResponse = customerService.getCustomerById(request.getCustomerId());
         return toOrderCreateResponse(orderResponses, customerResponse);
     }
+
+    @Override
+    public List<Order> getCustomerOrders(Long customerId) {
+        return orderRepository.getAllByCustomerId(customerId);
+    }
 }
