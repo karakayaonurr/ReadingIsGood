@@ -11,12 +11,18 @@ import com.getir.readingisgoodservice.model.request.OrderCreateRequest;
 import com.getir.readingisgoodservice.model.response.BookDetailResponse;
 import com.getir.readingisgoodservice.model.response.BookResponse;
 import com.getir.readingisgoodservice.model.response.CustomerResponse;
+import com.getir.readingisgoodservice.model.response.MonthlyStatistics;
 import com.getir.readingisgoodservice.model.response.OrderCreateResponse;
 import com.getir.readingisgoodservice.model.response.OrderDetailResponse;
 import com.getir.readingisgoodservice.model.response.OrderResponse;
+import com.getir.readingisgoodservice.model.response.StatisticsResponse;
 
+import java.math.BigDecimal;
+import java.time.Month;
+import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static com.getir.readingisgoodservice.entity.Order.calculate;
@@ -109,4 +115,31 @@ public class MapperUtil
                 .bookName(book.getName())
                 .build();
     }
+
+    public static StatisticsResponse toStatisticsResponse(Map<YearMonth, List<Order>> orderMap) {
+        return StatisticsResponse.builder()
+                .monthlyStatistics(toMonthlyStatistics(orderMap))
+                .build();
+    }
+
+    private static MonthlyStatistics monthlyStatistics(YearMonth month, List<Order> orders) {
+        Long totalBookCount = orders.stream().map(Order::getTotalBookCount).reduce(0L, Long::sum);
+        BigDecimal totalPurchasedAmount = orders.stream().map(Order::getTotalPrice).reduce(BigDecimal.ZERO, BigDecimal::add);
+        return MonthlyStatistics.builder()
+                .year(month.getYear())
+                .month(month.getMonth())
+                .totalBookCount(totalBookCount.intValue())
+                .totalOrderCount(orders.size())
+                .totalPurchasedAmount(totalPurchasedAmount)
+                .build();
+    }
+    private static List<MonthlyStatistics> toMonthlyStatistics(Map<YearMonth, List<Order>> orderMap) {
+        List<MonthlyStatistics> monthlyStatistics = new ArrayList<>();
+        for (Map.Entry<YearMonth, List<Order>> entry : orderMap.entrySet()) {
+            monthlyStatistics.add(monthlyStatistics(entry.getKey(), entry.getValue()));
+        }
+        return monthlyStatistics;
+    }
+
+
 }
