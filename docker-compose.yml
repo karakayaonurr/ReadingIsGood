@@ -1,5 +1,5 @@
 services:
-  paycore-credit-application-project:
+  getir-reading-is-good-project:
     build: .
     image: getir-reading-is-good-project
     ports:
