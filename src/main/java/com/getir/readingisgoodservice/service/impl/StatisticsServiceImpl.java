@@ -1,7 +1,6 @@
 package com.getir.readingisgoodservice.service.impl;
 
 import com.getir.readingisgoodservice.entity.Order;
-import com.getir.readingisgoodservice.exception.ApiErrorType;
 import com.getir.readingisgoodservice.exception.StatisticsNotFoundException;
 import com.getir.readingisgoodservice.model.response.StatisticsResponse;
 import com.getir.readingisgoodservice.service.OrderService;
@@ -11,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.Month;
 import java.time.YearMonth;
 import java.time.ZoneId;
 import java.util.List;

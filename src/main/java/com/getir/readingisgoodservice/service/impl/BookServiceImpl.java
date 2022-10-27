@@ -1,7 +1,6 @@
 package com.getir.readingisgoodservice.service.impl;
 
 import com.getir.readingisgoodservice.entity.Book;
-import com.getir.readingisgoodservice.exception.ApiErrorType;
 import com.getir.readingisgoodservice.exception.BookAlreadyExistException;
 import com.getir.readingisgoodservice.exception.BookNotFoundException;
 import com.getir.readingisgoodservice.model.request.BookRequest;

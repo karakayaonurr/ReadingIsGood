@@ -1,5 +1,6 @@
 package com.getir.readingisgoodservice.model.request;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -13,6 +14,7 @@ import java.math.BigDecimal;
  */
 @Getter
 @ToString
+@Builder
 public class BookRequest {
     @NotEmpty(message = "Name can not be empty.")
     private String name;
