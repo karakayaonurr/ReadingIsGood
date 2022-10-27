@@ -1,6 +1,9 @@
 package com.getir.readingisgoodservice.service.impl;
 
 import com.getir.readingisgoodservice.entity.Book;
+import com.getir.readingisgoodservice.exception.ApiErrorType;
+import com.getir.readingisgoodservice.exception.BookAlreadyExistException;
+import com.getir.readingisgoodservice.exception.BookNotFoundException;
 import com.getir.readingisgoodservice.model.request.BookRequest;
 import com.getir.readingisgoodservice.model.response.BookResponse;
 import com.getir.readingisgoodservice.model.response.StockResponse;
@@ -13,6 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
+import static com.getir.readingisgoodservice.exception.ApiErrorType.BOOK_EXIST_EXCEPTION;
+import static com.getir.readingisgoodservice.exception.ApiErrorType.BOOK_NOT_FOUND_EXCEPTION;
 import static com.getir.readingisgoodservice.mapper.MapperUtil.toBook;
 import static com.getir.readingisgoodservice.mapper.MapperUtil.toBookResponse;
 
@@ -29,6 +34,8 @@ public class BookServiceImpl implements BookService
     @Override
     @Transactional
     public BookResponse createBook(BookRequest request) {
+        bookRepository.findOneByName(request.getName()).ifPresent(ex -> {throw new BookAlreadyExistException(BOOK_EXIST_EXCEPTION);});
+
         Book bookSaved = bookRepository.save(toBook(request));
         log.info("Book saved successfully. Book: {}", bookSaved);
         return toBookResponse(bookSaved);
@@ -43,7 +50,7 @@ public class BookServiceImpl implements BookService
             log.info("Book found: {}", bookPresent);
             return toBookResponse(bookPresent);
         } else {
-            throw new RuntimeException();
+            throw new BookNotFoundException(BOOK_NOT_FOUND_EXCEPTION);
         }
     }
 
@@ -62,7 +69,8 @@ public class BookServiceImpl implements BookService
                     .bookName(bookPresent.getName())
                     .remainingStock(bookPresent.getStock())
                     .build();
+        } else {
+            throw new BookNotFoundException(BOOK_NOT_FOUND_EXCEPTION);
         }
-        return new StockResponse();
     }
 }

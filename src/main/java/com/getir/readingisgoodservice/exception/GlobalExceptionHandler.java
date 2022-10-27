@@ -9,7 +9,14 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import static com.getir.readingisgoodservice.exception.ApiErrorType.INTERNAL_SERVER_ERROR;
+import static com.getir.readingisgoodservice.exception.ApiErrorType.BOOK_EXIST_EXCEPTION;
+import static com.getir.readingisgoodservice.exception.ApiErrorType.BOOK_NOT_FOUND_EXCEPTION;
+import static com.getir.readingisgoodservice.exception.ApiErrorType.CUSTOMER_EXISTS_EXCEPTION;
+import static com.getir.readingisgoodservice.exception.ApiErrorType.CUSTOMER_NOT_FOUND_EXCEPTION;
+import static com.getir.readingisgoodservice.exception.ApiErrorType.FIELD_VALIDATION_EXCEPTION;
+import static com.getir.readingisgoodservice.exception.ApiErrorType.INTERNAL_SERVER_EXCEPTION;
+import static com.getir.readingisgoodservice.exception.ApiErrorType.ORDER_NOT_FOUND_EXCEPTION;
+import static com.getir.readingisgoodservice.exception.ApiErrorType.STATISTICS_NOT_FOUND_EXCEPTION;
 
 @Slf4j
 @ControllerAdvice
@@ -22,29 +29,89 @@ public class GlobalExceptionHandler {
                 exception.getErrorCode(),
                 exception.getErrorMessage());
 
-        return createErrorResponse(INTERNAL_SERVER_ERROR);
+        return createErrorResponse(INTERNAL_SERVER_EXCEPTION);
     }
 
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ApiErrorResponse> handleRuntimeException(RuntimeException exception) {
         log.error("Api exception occurred. Exception: {}, errorCode: {}, errorMessage: {}",
                 exception.getClass().getName(),
-                INTERNAL_SERVER_ERROR.getErrorCode(),
+                INTERNAL_SERVER_EXCEPTION.getErrorCode(),
                 exception.getMessage());
 
-        return createErrorResponse(INTERNAL_SERVER_ERROR);
+        return createErrorResponse(INTERNAL_SERVER_EXCEPTION);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException exception) {
         log.error("Api exception occurred. Exception: {}, errorCode: {}, errorMessage: {}",
                 exception.getClass().getName(),
-                HttpStatus.BAD_REQUEST.value(),
-                HttpStatus.BAD_REQUEST.getReasonPhrase());
+                FIELD_VALIDATION_EXCEPTION.getErrorCode(),
+                FIELD_VALIDATION_EXCEPTION.getErrorMessage());
 
-        return createErrorResponse(ApiErrorType.FIELD_VALIDATION_ERROR.getHttpStatus(),
+        return createErrorResponse(FIELD_VALIDATION_EXCEPTION.getHttpStatus(),
                 exception.getFieldErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).toList().toString(),
-                ApiErrorType.FIELD_VALIDATION_ERROR.getErrorCode());
+                FIELD_VALIDATION_EXCEPTION.getErrorCode());
+    }
+
+    @ExceptionHandler(BookAlreadyExistException.class)
+    public ResponseEntity<ApiErrorResponse> handleBookAlreadyExistException(BookAlreadyExistException exception) {
+        log.error("Api exception occurred. Exception: {}, errorCode: {}, errorMessage: {}",
+                exception.getClass().getName(),
+                exception.getErrorCode(),
+                exception.getErrorMessage());
+
+        return createErrorResponse(BOOK_EXIST_EXCEPTION);
+    }
+
+    @ExceptionHandler(BookNotFoundException.class)
+    public ResponseEntity<ApiErrorResponse> handleBookNotFoundException(BookNotFoundException exception) {
+        log.error("Api exception occurred. Exception: {}, errorCode: {}, errorMessage: {}",
+                exception.getClass().getName(),
+                exception.getErrorCode(),
+                exception.getErrorMessage());
+
+        return createErrorResponse(BOOK_NOT_FOUND_EXCEPTION);
+    }
+
+    @ExceptionHandler(CustomerAlreadyExistException.class)
+    public ResponseEntity<ApiErrorResponse> handleCustomerAlreadyExistException(CustomerAlreadyExistException exception) {
+        log.error("Api exception occurred. Exception: {}, errorCode: {}, errorMessage: {}",
+                exception.getClass().getName(),
+                exception.getErrorCode(),
+                exception.getErrorMessage());
+
+        return createErrorResponse(CUSTOMER_EXISTS_EXCEPTION);
+    }
+
+    @ExceptionHandler(CustomerNotFoundException.class)
+    public ResponseEntity<ApiErrorResponse> handleCustomerNotFoundException(CustomerNotFoundException exception) {
+        log.error("Api exception occurred. Exception: {}, errorCode: {}, errorMessage: {}",
+                exception.getClass().getName(),
+                exception.getErrorCode(),
+                exception.getErrorMessage());
+
+        return createErrorResponse(CUSTOMER_NOT_FOUND_EXCEPTION);
+    }
+
+    @ExceptionHandler(OrderNotFoundException.class)
+    public ResponseEntity<ApiErrorResponse> handleOrderNotFoundException(OrderNotFoundException exception) {
+        log.error("Api exception occurred. Exception: {}, errorCode: {}, errorMessage: {}",
+                exception.getClass().getName(),
+                exception.getErrorCode(),
+                exception.getErrorMessage());
+
+        return createErrorResponse(ORDER_NOT_FOUND_EXCEPTION);
+    }
+
+    @ExceptionHandler(StatisticsNotFoundException.class)
+    public ResponseEntity<ApiErrorResponse> handleStatisticsNotFoundException(StatisticsNotFoundException exception) {
+        log.error("Api exception occurred. Exception: {}, errorCode: {}, errorMessage: {}",
+                exception.getClass().getName(),
+                exception.getErrorCode(),
+                exception.getErrorMessage());
+
+        return createErrorResponse(STATISTICS_NOT_FOUND_EXCEPTION);
     }
 
     private ResponseEntity<ApiErrorResponse> createErrorResponse(ApiErrorType apiErrorType) {
@@ -54,9 +121,9 @@ public class GlobalExceptionHandler {
                 .errorStatus(apiErrorType.getHttpStatus())
                 .build();
 
-        return ResponseEntity.
-                status(apiErrorType.getHttpStatus()).
-                body(apiErrorResponse);
+        return ResponseEntity
+                .status(apiErrorType.getHttpStatus())
+                .body(apiErrorResponse);
     }
 
     private ResponseEntity<ApiErrorResponse> createErrorResponse(HttpStatus httpStatus, String errorMessage, int errorCode) {
@@ -66,8 +133,8 @@ public class GlobalExceptionHandler {
                 .errorStatus(httpStatus)
                 .build();
 
-        return ResponseEntity.
-                status(httpStatus).
-                body(apiErrorResponse);
+        return ResponseEntity
+                .status(httpStatus)
+                .body(apiErrorResponse);
     }
 }

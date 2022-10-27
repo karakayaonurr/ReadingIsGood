@@ -2,6 +2,9 @@ package com.getir.readingisgoodservice.service.impl;
 
 import com.getir.readingisgoodservice.entity.Book;
 import com.getir.readingisgoodservice.entity.Order;
+import com.getir.readingisgoodservice.exception.ApiErrorType;
+import com.getir.readingisgoodservice.exception.BookNotFoundException;
+import com.getir.readingisgoodservice.exception.OrderNotFoundException;
 import com.getir.readingisgoodservice.model.request.OrderCreateRequest;
 import com.getir.readingisgoodservice.model.response.CustomerResponse;
 import com.getir.readingisgoodservice.model.response.OrderCreateResponse;
@@ -19,6 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.getir.readingisgoodservice.exception.ApiErrorType.BOOK_NOT_FOUND_EXCEPTION;
+import static com.getir.readingisgoodservice.exception.ApiErrorType.ORDER_NOT_FOUND_EXCEPTION;
 import static com.getir.readingisgoodservice.mapper.MapperUtil.toOrder;
 import static com.getir.readingisgoodservice.mapper.MapperUtil.toOrderCreateResponse;
 import static com.getir.readingisgoodservice.mapper.MapperUtil.toOrderResponses;
@@ -41,10 +46,12 @@ public class OrderServiceImpl implements OrderService {
                 Book bookPresent = book.get();
                 books.add(bookPresent);
                 bookPresent.setStock(bookPresent.getStock() - bookOrder.getOrderCount());
+            } else {
+                throw new BookNotFoundException(BOOK_NOT_FOUND_EXCEPTION);
             }
         });
         Order orderSaved = orderRepository.save(toOrder(request, books));
-        log.info("Customer saved successfully. Cusstomer: {}", orderSaved);
+        log.info("Customer saved successfully. Customer: {}", orderSaved);
 
         List<OrderResponse> orderResponses = toOrderResponses(request.getBookOrderRequests());
         CustomerResponse customerResponse = customerService.getCustomerById(request.getCustomerId());
@@ -53,6 +60,13 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<Order> getCustomerOrders(Long customerId) {
-        return orderRepository.getAllByCustomerId(customerId);
+
+        List<Order> orders = orderRepository.getAllByCustomerId(customerId);
+
+        if(orders.isEmpty()) {
+            throw new OrderNotFoundException(ORDER_NOT_FOUND_EXCEPTION);
+        }
+
+        return orders;
     }
 }

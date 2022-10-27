@@ -2,6 +2,9 @@ package com.getir.readingisgoodservice.service.impl;
 
 import com.getir.readingisgoodservice.entity.Customer;
 import com.getir.readingisgoodservice.entity.Order;
+import com.getir.readingisgoodservice.exception.ApiErrorType;
+import com.getir.readingisgoodservice.exception.CustomerAlreadyExistException;
+import com.getir.readingisgoodservice.exception.CustomerNotFoundException;
 import com.getir.readingisgoodservice.model.request.CustomerRequest;
 import com.getir.readingisgoodservice.model.response.CustomerOrderResponse;
 import com.getir.readingisgoodservice.model.response.CustomerResponse;
@@ -16,6 +19,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
+import static com.getir.readingisgoodservice.exception.ApiErrorType.CUSTOMER_EXISTS_EXCEPTION;
+import static com.getir.readingisgoodservice.exception.ApiErrorType.CUSTOMER_NOT_FOUND_EXCEPTION;
 import static com.getir.readingisgoodservice.mapper.MapperUtil.toCustomer;
 import static com.getir.readingisgoodservice.mapper.MapperUtil.toCustomerResponse;
 import static com.getir.readingisgoodservice.mapper.MapperUtil.toOrderDetailResponses;
@@ -34,8 +39,10 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     @Transactional
     public CustomerResponse createCustomer(CustomerRequest request) {
+        customerRepository.findOneByEmail(request.getEmail()).ifPresent(ex -> {throw new CustomerAlreadyExistException(CUSTOMER_EXISTS_EXCEPTION);});
+
         Customer customerSaved = customerRepository.save(toCustomer(request));
-        log.info("Customer saved successfully. Cusstomer: {}", customerSaved);
+        log.info("Customer saved successfully. Customer: {}", customerSaved);
         return toCustomerResponse(customerSaved);
     }
 
@@ -48,7 +55,7 @@ public class CustomerServiceImpl implements CustomerService {
             log.info("Customer found: {}", customerPresent);
             return toCustomerResponse(customerPresent);
         } else {
-            throw new RuntimeException();
+            throw new CustomerNotFoundException(CUSTOMER_NOT_FOUND_EXCEPTION);
         }
     }
 
@@ -67,7 +74,7 @@ public class CustomerServiceImpl implements CustomerService {
                     .orders(toOrderDetailResponses(orders))
                     .build();
         } else {
-            throw new RuntimeException();
+            throw new CustomerNotFoundException(CUSTOMER_NOT_FOUND_EXCEPTION);
         }
     }
 }
