@@ -37,5 +37,5 @@ CREATE TABLE orders_book_list (
                                         book_list_id int8 NOT NULL
 );
 
-ALTER TABLE orders_book_list ADD CONSTRAINT orders_book_constraint FOREIGN KEY (book_list_id) REFERENCES book(id);
-ALTER TABLE orders_book_list ADD CONSTRAINT orders_order_constraint FOREIGN KEY (order_id) REFERENCES orders(id);
+ALTER TABLE orders_book_list ADD CONSTRAINT fk2jvmfr2qcxh2qml1w6140dsci FOREIGN KEY (book_list_id) REFERENCES book(id);
+ALTER TABLE orders_book_list ADD CONSTRAINT fk9gt62g2h1lrekekf81om3dl0i FOREIGN KEY (order_id) REFERENCES orders(id);
